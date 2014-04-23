@@ -1,0 +1,153 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Moveez</title>
+  <meta name="description" content="The HTML5 Herald">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/tables.css">
+  <link rel="stylesheet" href="css/buttons.css">
+  <link href='http://fonts.googleapis.com/css?family=Bangers|Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/app.css">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
+<style type="text/css">
+
+</style>
+
+<header>
+<h1>MOVEEz!</h1>
+</header>
+
+<div id="main">
+
+	<h3>Add Movies</h3>
+    <form action="" method="post" id="movie_form">
+    	<fieldset>
+            <ul>
+                <li>
+                	<label for="title">Movie Title</label>
+  					<input type="text" name="title" id="title" placeholder="Enter a Movie Title" required>
+                </li>
+                <li>
+                <select name="rating" id="rating" required>
+                    <option value="">Rate Movie 1-5</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>	
+                </li>
+                <li>
+                     <input type="submit" value="List Movie" class="button button-pill button-flat-action">
+                </li>
+            </ul>	
+    	</fieldset>
+    </form>
+
+    <h2>My Favorite MoviesS</h2>
+    <p>Just a few of my favorite Movee thangses!</P>
+    <table cellpadding="0" cellspacing="0" id="movie_table">
+        <thead>
+            <tr>
+                 <th>Movie Title</th>
+                 <th>Movie Rating</th>
+                 <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+</div>
+<footer>
+<p>Copyright &copy;<span class="year"></span>. All Rights Deserved.</p>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="js/modernizr.js"></script>
+  <script src="js/buttons.js"></script>
+  <script type="text/javascript">
+$(function() {
+    //console.log( "ready!" );
+    var currentYear = (new Date).getFullYear(); 
+$('.year').html(currentYear);
+
+    /*
+    // Array tutorial  
+    var fruits= new Array('apples', 'oranges', 'bananas');
+    //logs apples to the console
+    console.log(fruits[0]);
+    // Selects an element with id fruitoftheday and inserts oranges
+    $('#fruitoftheday').html(fruits[1]);
+    */
+
+    //var movieArray = new Array( new Array('Pulp Fiction', 5), new Array('American Beauty', 4) );
+    //shorthand Array
+
+    var movieArray = [['Pulp Fiction', 5], ['Amercian Beauty', 4] ]
+    
+    updateTable( movieArray );
+
+    //console.log(movieArray[0][0]); 
+
+    //for loop. loops through the each item in the array.
+    /*for(var i=0; i < movieArray.length; i++){
+        console.log(movieArray[i][0] + " Rating: " + movieArray[i][1]);
+    }*/
+
+    $('#movie_form').on('submit', function(event){
+        var title = $('#title').val(); 
+        var rating = $('#rating').val();
+
+        //push info to end of array
+        movieArray.push( [ title, rating ] )
+
+        //Update the movie table 
+        updateTable(movieArray);
+
+        //console.log(title + ' - ' + rating);
+        //$('#movie_table').find('tbody').append('<tr><td>' + title + '</td><td>' + rating + ' Stars</td><td>[ x ] </td></tr>');
+        event.preventDefault();
+      });
+
+      $('#movie_table').on('click', '.delete_movie', function(e){
+      //Grab the id 
+      var id = $(this).attr("id");
+      //replace Id_ with nothing leaving only an integer 
+      id=id.replace("id_", "");
+
+      //Remove one element at id (index number)
+      movieArray.splice(id, 1);
+
+      //Update Table
+      updateTable( movieArray );
+
+      e.preventDefault();
+
+      });
+    
+    function updateTable(movies){
+        var mbody = $('#movie_table').find('tbody');
+        mbody.empty();
+
+
+        $.each(movies, function(key, value){
+            //$'#movie_table').find('tbody').append();   
+            mbody.append('<tr><td>' + value[0] + '</td><td>' + value[1] + ' Stars</td><td><a href="" class="delete_movie" id="id_ ' + key + '">[ x ]</a> </td></tr>');
+
+        });
+
+      }
+
+    });
+  </script>
+</body>
+</html>
