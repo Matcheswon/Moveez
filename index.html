@@ -28,7 +28,7 @@
 <div id="main">
 
 	<h3>Add Movies</h3>
-    <form action="" method="post" id="movie_form">
+    <form action="includes/db_functions.php" method="post" id="movie_form">
     	<fieldset>
             <ul>
                 <li>
@@ -102,7 +102,7 @@ $('.year').html(currentYear);
     /*for(var i=0; i < movieArray.length; i++){
         console.log(movieArray[i][0] + " Rating: " + movieArray[i][1]);
     }*/
-
+    /*
     $('#movie_form').on('submit', function(event){
         var title = $('#title').val(); 
         var rating = $('#rating').val();
@@ -117,7 +117,7 @@ $('.year').html(currentYear);
         //$('#movie_table').find('tbody').append('<tr><td>' + title + '</td><td>' + rating + ' Stars</td><td>[ x ] </td></tr>');
         event.preventDefault();
       });
-
+      */
       $('#movie_table').on('click', '.delete_movie', function(e){
       //Grab the id 
       var id = $(this).attr("id");
