@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/tables.css">
   <link rel="stylesheet" href="css/buttons.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
   <link href='http://fonts.googleapis.com/css?family=Bangers|Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/app.css">
 
@@ -50,6 +51,7 @@
                 </li>
             </ul>	
     	</fieldset>
+      <input type="hidden" name="movie_id" id="movie_id" value="" >
     </form>
 
     <h2>My Favorite MoviesS</h2>
@@ -72,6 +74,7 @@
 </footer>
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <script src="js/modernizr.js"></script>
   <script src="js/buttons.js"></script>
   <script type="text/javascript">
@@ -124,7 +127,41 @@ $('.year').html(currentYear);
         //$('#movie_table').find('tbody').append('<tr><td>' + title + '</td><td>' + rating + ' Stars</td><td>[ x ] </td></tr>');
         event.preventDefault();
       });
-      
+      var apiKey='zp8pps3vyca4vz6rrt9644q2';
+      $("#title").autocomplete({
+    source: function( request, response ) {
+        $.ajax("http://api.rottentomatoes.com/api/public/v1.0/movies.json", {
+            data: {
+                apikey: apiKey,
+                q: request.term,
+                limit: 1
+            },
+            dataType: "jsonp",
+            success: function(data) {
+                response($.map(data.movies, function(movie) {
+                    return {
+                        id: movie.id,
+                        value: movie.title,
+                        thumb: movie.posters.thumbnail
+                    }
+                }));           
+            }
+        });
+    },
+    select: function(event, ui){
+      //console.log(ui.item.id); 
+      $('#movie_id').attr('value', ui.item.id);
+    }
+
+}).data( "uiAutocomplete" )._renderItem = function( ul, item ) {
+    var img = $("<img>").attr("src", item.thumb).attr('width', 25);
+    var link = $("<a>").text(item.label).prepend(img);
+    return $("<li>")
+        .data( "item.uiAutocomplete", item )
+        .append(link)
+        .appendTo(ul);
+};
+
       $('#movie_table').on('click', '.delete_movie', function(e){
       //Grab the id 
       var movie_id = $(this).attr("id");
